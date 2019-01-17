@@ -13,6 +13,7 @@
 #import "AAMultiSelectModel.h"
 
 #define AA_SAFE_BLOCK_CALL(block, ...) block ? block(__VA_ARGS__) : nil
+#define AA_SELECT_BLOCK_CALL(block, ...) block ? block(__VA_ARGS__) : nil
 #define WeakObj(o) autoreleasepool{} __weak typeof(o) weak##o = o;
 #define UIColorFromHexWithAlpha(hexValue,a) [UIColor colorWithRed:((float)((hexValue & 0xFF0000) >> 16))/255.0 green:((float)((hexValue & 0xFF00) >> 8))/255.0 blue:((float)(hexValue & 0xFF))/255.0 alpha:a]
 #define UIColorFromHex(hexValue) UIColorFromHexWithAlpha(hexValue,1.0)
