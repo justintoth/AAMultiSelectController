@@ -17,6 +17,11 @@
 @property (nonatomic, strong) NSArray                *dataArray;
 
 /**
+ *  original data array to choose
+ */
+@property (nonatomic, strong) NSArray                *originalDataArray;
+
+/**
  *  top title text
  */
 @property (nonatomic, copy  ) NSString               *titleText;
@@ -106,6 +111,11 @@
  *  a callback when tap confirm button, selectedObjects is array of selected AAMultiSelectModel.
  */
 @property (nonatomic, copy) void (^confirmBlock)(NSArray *selectedObjects);
+
+/**
+ *  a callback when item is selected , selectedObject is object of selected AAMultiSelectModel.
+ */
+@property (nonatomic, copy) void (^selectedBlock)(NSObject *selectedObject);
 
 
 /**
