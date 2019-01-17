@@ -113,7 +113,13 @@
 @property (nonatomic, copy) void (^confirmBlock)(NSArray *selectedObjects);
 
 /**
- *  a callback when item is selected , selectedObject is object of selected AAMultiSelectModel.
+ *  a callback when tap cancel button
+ */
+@property (nonatomic, copy) void (^cancelBlock)();
+
+
+/**
+ *  a callback when item is selected , selectedObjects is array of selected AAMultiSelectModel.
  */
 @property (nonatomic, copy) void (^selectedBlock)(NSObject *selectedObject);
 
