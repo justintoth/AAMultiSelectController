@@ -26,7 +26,7 @@ static CGFloat const viewCornerRadius                  = 5.f;
 static CGFloat const tableViewRowHeight                = 50;
 static NSInteger const titleLabelMarginTop             = 15;
 static CGFloat const separatorHeight                   = 0.5f;
-static NSInteger const topSeparatorMarginTop           = 10;
+static NSInteger const topSeparatorMarginTop           = 25;
 static NSInteger const bottomSeparatorMarginTop        = 10;
 
 static NSInteger const buttonContainerViewMarginTop    = 25;
@@ -44,7 +44,7 @@ static NSInteger const AADefaultConfirmButtonBackgroundColor     = 0X800080;
 static NSInteger const AADefaultCancelButtonBackgroundColor     = 0XAAAAAA;
 static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
 
-@interface AAMultiSelectViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface AAMultiSelectViewController () <UITableViewDataSource, UISearchBarDelegate, UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIButton    *confirmButton;
@@ -52,6 +52,8 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
 @property (nonatomic, strong) UILabel     *titleLabel;
 @property (nonatomic, strong) UIView      *topSeparator;
 @property (nonatomic, strong) UIView      *bottomSeparator;
+@property (nonatomic, strong) UISearchBar *searchBar;
+@property (nonatomic, strong) NSArray *tempDataArray;
 @property (nonatomic, strong) AAPopupView *popupView;
 
 @end
@@ -61,6 +63,11 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setupUI];
+    [self addObserver:self forKeyPath:@"self.dataArray" options:NSKeyValueObservingOptionNew context:nil];
+}
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    self.tempDataArray = [self.dataArray copy];
 }
 
 #pragma mark - Set up
@@ -68,6 +75,7 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
 - (void)setupUI {
     [self setupView];
     [self setupTitleLabel];
+    [self setupSearBarView];
     [self setupTableView];
     [self setupButtons];
     [self setupPopup];
@@ -77,6 +85,7 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
     self.view.layer.cornerRadius = viewCornerRadius;
     self.view.clipsToBounds      = YES;
     self.view.backgroundColor    = [UIColor whiteColor];
+    
 }
 
 - (void)setupTitleLabel {
@@ -92,16 +101,8 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
         make.right.equalTo(weakself.view);
         make.top.equalTo(weakself.view).offset(titleLabelMarginTop);
     }];
+    
     self.titleLabel                   = titleLabel;
-    self.topSeparator                 = [UIView new];
-    self.topSeparator.backgroundColor = UIColorFromHex(separatorBackgroundColor);
-    [self.view addSubview:self.topSeparator];
-    [self.topSeparator mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(weakself.view);
-        make.right.equalTo(weakself.view);
-        make.top.equalTo(weakself.titleLabel.mas_bottom).offset(topSeparatorMarginTop);
-        make.height.mas_equalTo(separatorHeight);
-    }];
 }
 
 - (void)setupButtons {
@@ -183,9 +184,91 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
     self.popupMaskType    = AAPopupViewMaskTypeDimmed;
 }
 
+- (void)setupSearBarView{
+    @WeakObj(self);
+    UISearchBar *searchBar       = [UISearchBar new];
+    searchBar.searchBarStyle = UISearchBarStyleProminent;
+    searchBar.placeholder = @"Search...";
+    searchBar.delegate = self;
+    searchBar.translucent = false;
+    [searchBar setReturnKeyType:UIReturnKeyDone];
+    [searchBar sizeToFit];
+    
+    [self.view addSubview:searchBar];
+    [searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(weakself.view);
+        make.right.equalTo(weakself.view);
+        make.top.equalTo(weakself.titleLabel.mas_bottom).offset(topSeparatorMarginTop);
+    }];
+    
+    self.searchBar = searchBar;
+    
+    self.topSeparator                 = [UIView new];
+    self.topSeparator.backgroundColor = UIColorFromHex(separatorBackgroundColor);
+    [self.view addSubview:self.topSeparator];
+    [self.topSeparator mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(weakself.view);
+        make.right.equalTo(weakself.view);
+        make.top.equalTo(weakself.searchBar.mas_bottom);
+        make.height.mas_equalTo(separatorHeight);
+    }];
+}
+
+#pragma mark - SearchBar Delegate Methods
+
+-(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    @try
+    {
+        NSMutableArray *tData = [[NSMutableArray alloc] init];
+        
+        AAMultiSelectModel *model;
+        if ([searchText length] > 0)
+        {
+       
+            for (int i = 0; i < [self.dataArray count] ; i++)
+            {
+                model = [self.dataArray objectAtIndex:i];
+                NSString *title = model.title;
+                if (title.length >= searchText.length)
+                {
+                    NSRange titleResultsRange = [title rangeOfString:searchText options:NSCaseInsensitiveSearch];
+                    if (titleResultsRange.length > 0)
+                    {
+                        [tData addObject:[self.dataArray objectAtIndex:i]];
+                    }
+                }
+
+            }
+            self.tempDataArray = [tData copy];
+        }
+        else
+        {
+            self.tempDataArray = [self.dataArray copy];
+        }
+
+        [self.tableView reloadData];
+    }
+    @catch (NSException *exception) {
+    }
+}
+
+- (void) searchBarSearchButtonClicked:(UISearchBar *)searchBar{
+    [self.searchBar endEditing:true];
+}
+
+- (void) searchBarCancelButtonClicked:(UISearchBar *)searchBar{
+    [self.searchBar endEditing:true];
+}
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+{
+    searchBar.enablesReturnKeyAutomatically = NO;
+}
+
 #pragma mark - UITableView DataSource && Delegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.dataArray.count;
+    return self.tempDataArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
@@ -193,7 +276,7 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
     AAMultiSelectTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:tableViewCellIdentifierName
                                                                         forIndexPath:indexPath];
     cell.selectionStyle             = UITableViewCellSelectionStyleNone;
-    AAMultiSelectModel *selectModel = self.dataArray[indexPath.row];
+    AAMultiSelectModel *selectModel = self.tempDataArray[indexPath.row];
     cell.titleTextColor             = self.itemTitleColor;
     cell.titleFont                  = self.itemTitleFont;
     cell.title                      = selectModel.title;
@@ -203,7 +286,7 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    AAMultiSelectModel *selectModel = self.dataArray[indexPath.row];
+    AAMultiSelectModel *selectModel = self.tempDataArray[indexPath.row];
     selectModel.isSelected          = !selectModel.isSelected;
     [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
@@ -213,7 +296,7 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
 - (void)confirmButtonTapped {
     [self.popupView dismiss:YES];
     NSMutableArray *selectedArray = [NSMutableArray array];
-    for (AAMultiSelectModel *selectedModel in self.dataArray) {
+    for (AAMultiSelectModel *selectedModel in self.tempDataArray) {
         if (selectedModel.isSelected) {
             [selectedArray addObject:selectedModel];
         }
