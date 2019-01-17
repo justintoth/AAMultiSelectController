@@ -292,6 +292,7 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
     AAMultiSelectModel *selectModel = self.tempDataArray[indexPath.row];
     selectModel.isSelected          = !selectModel.isSelected;
     [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    AA_SELECT_BLOCK_CALL(self.selectedBlock, selectModel);
 }
 
 #pragma mark - Events
@@ -309,6 +310,7 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
 
 - (void)cancelButtonTapped {
     [self.popupView dismiss:YES];
+    AA_SAFE_BLOCK_CALL(self.cancelBlock, nil);
 }
 
 #pragma mark - Helper
