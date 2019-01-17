@@ -115,7 +115,7 @@
 /**
  *  a callback when tap cancel button
  */
-@property (nonatomic, copy) void (^cancelBlock)();
+@property (nonatomic, copy) void (^cancelBlock)(BOOL *canceled);
 
 
 /**
