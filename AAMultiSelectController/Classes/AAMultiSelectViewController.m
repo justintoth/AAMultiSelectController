@@ -311,7 +311,10 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
 
 - (void)cancelButtonTapped {
     [self.popupView dismiss:YES];
-    
+    for (AAMultiSelectModel *selectedModel in self.dataArray) {
+        selectedModel.isSelected = false;
+    }
+
     AA_CANCEL_BLOCK_CALL(self.cancelBlock, false);
 }
 
