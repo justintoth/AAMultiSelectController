@@ -47,6 +47,12 @@
 @property (nonatomic, strong) UIFont                 *confirmButtonTitleFont;
 
 /**
+ *  confirm button title text
+ */
+@property (nonatomic, strong) NSString                 *confirmButtonTitleText;
+
+
+/**
  *  cancel button background color
  */
 @property (nonatomic, strong) UIColor                *cancelButtonBackgroudColor;
@@ -60,6 +66,11 @@
  *  cancel button title font
  */
 @property (nonatomic, strong) UIFont                 *cancelButtonTitleFont;
+
+/**
+ *  confirm button title text
+ */
+@property (nonatomic, strong) NSString                 *cancelButtonTitleText;
 
 /**
  *  item title color
