@@ -311,11 +311,9 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
 
 - (void)cancelButtonTapped {
     [self.popupView dismiss:YES];
-    NSMutableArray *selectedArray = [NSMutableArray array];
-    for (AAMultiSelectModel *selectedModel in self.dataArray) {
+    for (AAMultiSelectModel *selectedModel in self.tempDataArray) {
         selectedModel.isSelected = false;
     }
-    self.dataArray = selectedArray;
     
     AA_CANCEL_BLOCK_CALL(self.cancelBlock, false);
 }
