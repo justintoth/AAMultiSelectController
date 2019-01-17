@@ -360,6 +360,13 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
     }
 }
 
+- (void)setConfirmButtonTitleText:(NSString *)confirmButtonTitleText{
+    if (_confirmButtonTitleText != confirmButtonTitleText) {
+        _confirmButtonTitleText = confirmButtonTitleText;
+        [self.confirmButton setTitle:confirmButtonTitleText forState:UIControlStateNormal];
+    }
+}
+
 - (void)setCancelButtonBackgroudColor:(UIColor *)cancelButtonBackgroudColor {
     if (_cancelButtonBackgroudColor != cancelButtonBackgroudColor) {
         _cancelButtonBackgroudColor        = cancelButtonBackgroudColor;
@@ -381,6 +388,14 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
         self.cancelButton.titleLabel.font = cancelButtonTitleFont;
     }
 }
+
+- (void)setCancelButtonTitleText:(NSString *)cancelButtonTitleText {
+    if (_cancelButtonTitleText != cancelButtonTitleText) {
+        _cancelButtonTitleText = cancelButtonTitleText;
+        [self.cancelButton setTitle:cancelButtonTitleText forState:UIControlStateNormal];
+    }
+}
+
 
 
 @end
