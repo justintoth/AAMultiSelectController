@@ -117,6 +117,8 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
         make.top.equalTo(weakself.tableView.mas_bottom).offset(buttonContainerViewMarginTop);
     }];
     
+    NSString *cancelText = self.cancelButtonTitleText? : @"cancel";
+    NSString *confirmText =  self.confirmButtonTitleText? : @"confirm";
     self.confirmButton                    = [UIButton buttonWithType:UIButtonTypeCustom];
     self.confirmButton.backgroundColor    = self.confirmButtonBackgroudColor ? : UIColorFromHex(AADefaultConfirmButtonBackgroundColor);
     self.confirmButton.layer.cornerRadius = buttonCornerRadius;
@@ -124,7 +126,7 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
     self.confirmButton.contentEdgeInsets  = UIEdgeInsetsMake(buttonInsetsTop, buttonInsetsLeft,
                                                              buttonInsetsBottom, buttonInsetsRight);
     [self.confirmButton addTarget:self action:@selector(confirmButtonTapped) forControlEvents:UIControlEventTouchUpInside];
-    [self.confirmButton setTitle:@"confirm" forState:UIControlStateNormal];
+    [self.confirmButton setTitle:confirmText forState:UIControlStateNormal];
     [buttonContainerView addSubview:self.confirmButton];
     [self.confirmButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(buttonContainerView);
@@ -139,7 +141,7 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
     self.cancelButton.contentEdgeInsets   = UIEdgeInsetsMake(buttonInsetsTop, buttonInsetsLeft,
                                                              buttonInsetsBottom, buttonInsetsRight);
     [self.cancelButton addTarget:self action:@selector(cancelButtonTapped) forControlEvents:UIControlEventTouchUpInside];
-    [self.cancelButton setTitle:@"cancel" forState:UIControlStateNormal];
+    [self.cancelButton setTitle:cancelText forState:UIControlStateNormal];
     [buttonContainerView addSubview:self.cancelButton];
     
     [self.cancelButton mas_makeConstraints:^(MASConstraintMaker *make) {
