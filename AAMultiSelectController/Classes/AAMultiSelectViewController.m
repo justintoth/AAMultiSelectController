@@ -292,8 +292,10 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     AAMultiSelectModel *selectModel = self.tempDataArray[indexPath.row];
     selectModel.isSelected          = !selectModel.isSelected;
-    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-    AA_SELECT_BLOCK_CALL(self.selectedBlock, selectModel);
+    if(selectModel.isSelected){
+        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        AA_SELECT_BLOCK_CALL(self.selectedBlock, selectModel);
+    }
 }
 
 #pragma mark - Events
