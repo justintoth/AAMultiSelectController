@@ -292,6 +292,13 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     AAMultiSelectModel *selectModel = self.tempDataArray[indexPath.row];
     selectModel.isSelected          = !selectModel.isSelected;
+    
+    for (AAMultiSelectModel *sModel in self.dataArray) {
+        if (selectModel.multiSelectId == sModel.multiSelectId) {
+            sModel.isSelected = selectModel.isSelected;
+        }
+    }
+    
     [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     if(selectModel.isSelected){
         AA_SELECT_BLOCK_CALL(self.selectedBlock, selectModel);
@@ -303,7 +310,7 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
 - (void)confirmButtonTapped {
     [self.popupView dismiss:YES];
     NSMutableArray *selectedArray = [NSMutableArray array];
-    for (AAMultiSelectModel *selectedModel in self.tempDataArray) {
+    for (AAMultiSelectModel *selectedModel in self.dataArray) {
         if (selectedModel.isSelected) {
             [selectedArray addObject:selectedModel];
         }
