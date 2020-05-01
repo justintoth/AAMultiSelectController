@@ -254,7 +254,7 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
 
         [self.tableView reloadData];
         
-        AA_SEARCH_TEXT_CHANGED_BLOCK_CALL(self.onSearchTextChanged, searchText)
+        AA_SEARCH_TEXT_CHANGED_BLOCK_CALL(self.onSearchTextChanged, searchText);
     }
     @catch (NSException *exception) {
     }
