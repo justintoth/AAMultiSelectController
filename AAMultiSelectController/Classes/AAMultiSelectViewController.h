@@ -122,6 +122,11 @@
  */
 @property (nonatomic, copy) void (^cancelBlock)(BOOL *canceled);
 
+/**
+ *  a callback when search text change
+ */
+@property (nonatomic, copy) void (^onSearchTextChanged)(NSString *searchText);
+
 
 /**
  *  a callback when item is selected , selectedObjects is array of selected AAMultiSelectModel.
