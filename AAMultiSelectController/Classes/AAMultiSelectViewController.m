@@ -302,7 +302,10 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
     [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     if(selectModel.isSelected){
         AA_SELECT_BLOCK_CALL(self.selectedBlock, selectModel);
+    }else{
+        AA_SELECT_BLOCK_CALL(self.unselectedBlock, selectModel);
     }
+    
 }
 
 #pragma mark - Events
