@@ -192,7 +192,7 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
     @WeakObj(self);
     UISearchBar *searchBar       = [UISearchBar new];
     searchBar.searchBarStyle = UISearchBarStyleProminent;
-    searchBar.placeholder = @"Search...";
+    searchBar.placeholder = self.searchHintText;
     searchBar.delegate = self;
     searchBar.translucent = false;
     [searchBar setReturnKeyType:UIReturnKeyDone];
