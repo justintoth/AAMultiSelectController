@@ -253,6 +253,8 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
         }
 
         [self.tableView reloadData];
+        
+        AA_SEARCH_TEXT_CHANGED_BLOCK_CALL(self.onSearchTextChanged, searchText)
     }
     @catch (NSException *exception) {
     }
@@ -269,10 +271,6 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
 {
     searchBar.enablesReturnKeyAutomatically = NO;
-}
-
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
-    AA_SEARCH_TEXT_CHANGED_BLOCK_CALL(self.onSearchTextChanged, searchText)
 }
 
 #pragma mark - UITableView DataSource && Delegate
