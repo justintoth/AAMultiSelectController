@@ -27,6 +27,11 @@
 @property (nonatomic, copy  ) NSString               *titleText;
 
 /**
+ *  search hint text
+ */
+@property (nonatomic, copy  ) NSString               *searchHintText;
+
+/**
  *  top title text color
  */
 @property (nonatomic, strong) UIColor                *titleTextColor;
@@ -122,6 +127,12 @@
  *  a callback when item is selected , selectedObjects is array of selected AAMultiSelectModel.
  */
 @property (nonatomic, copy) void (^selectedBlock)(NSObject *selectedObject);
+
+
+/**
+ *  a callback when item is unselected , selectedObjects is array of selected AAMultiSelectModel.
+ */
+@property (nonatomic, copy) void (^unselectedBlock)(NSObject *selectedObject);
 
 
 /**
