@@ -73,6 +73,13 @@ static NSInteger const separatorBackgroundColor        = 0XDCDCDC;
     self.tempDataArray = [self.dataArray copy];
 }
 
+- (void)dealloc {
+    @try{
+        [self removeObserver:self forKeyPath:@"self.dataArray" context:nil];
+    }@catch(id anException){
+    }
+}
+
 #pragma mark - Set up
 
 - (void)setupUI {
